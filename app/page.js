@@ -1,101 +1,295 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { PlaceholdersAndVanishInput } from "/home/kunal/Documents/speech project/improveai/components/ui/placeholders-and-vanish-input.jsx";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function PlaceholdersAndVanishInputDemo() {
+  // console.log(user?.id);
+  const [step, setStep] = useState(0);
+  const [role, setRole] = useState("");
+  const [field, setField] = useState("");
+  const [experience, setExperience] = useState("");
+  const [scenario, setScenario] = useState("");
+  const [purpose, setPuropse] = useState("");
+  const router = useRouter();
+  //   const handleChange = (e) => {
+  //     console.log(e.target.value);
+  //   };
+
+  const [toimprove, setSelectedValues] = useState([]);
+
+  // Handler for checkbox change
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      // Add value to selected values
+      setSelectedValues((prev) => [...prev, value]);
+    } else {
+      // Remove value from selected values
+      setSelectedValues((prev) => prev.filter((v) => v !== value));
+    }
+  };
+
+  const submitALL = async () => {
+    const response = await fetch("http://192.168.31.184:5000/user_profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        role,
+        field,
+        experience,
+        scenario,
+        purpose,
+        toimprove,
+      }),
+    });
+
+    const result = await response.json();
+    // alert(`Response from Flask: ${result.message}`);
+    console.log(result.message);
+    if (result.message == "success") {
+      router.push("/connector");
+    }
+
+    // console.log(
+    //   role,
+    //   field,
+    //   experience,
+    //   scenario,
+    //   purpose,
+    //   selectedValues.join(", ")
+    // );
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="h-[40rem] flex flex-col justify-center  items-center px-4">
+      {step == 0 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Tell me your Role/Position
+          </h2>
+          <PlaceholdersAndVanishInput
+            placeholders={[
+              "Software Developer",
+              "Manager",
+              "Data Scientist",
+              "Product Manager",
+              "Sales Representative",
+              "Customer Service Representative",
+              "Marketing Specialist",
+              "Human Resources Professional",
+              "Accountant",
+              "Engineer",
+            ]}
+            onChange={(e) => setRole(e.target.value)}
+            onSubmit={() => (setStep(1), console.log(role))}
+          />
+        </>
+      )}
+      {step == 1 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Industry/Field of Interest
+          </h2>
+          <PlaceholdersAndVanishInput
+            placeholders={[
+              "IT (Information Technology)",
+              "Finance",
+              "Healthcare",
+              "Education",
+              "Manufacturing",
+            ]}
+            onChange={(e) => setField(e.target.value)}
+            onSubmit={() => (setStep(2), console.log(field))}
+          />
+        </>
+      )}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      {step == 2 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Experience Level
+          </h2>
+          <div className="flex gap-3 flex-wrap justify-center text-lg">
+            <button
+              className="text-center my-2 inline-block w-40 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-48"
+              onClick={() => (setExperience("0-1"), setStep(3))}
+            >
+              0-1 Years
+            </button>
+            <button
+              className="text-center my-2 inline-block w-40 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-48"
+              onClick={() => (setExperience("1-2"), setStep(3))}
+            >
+              1-2 Years
+            </button>
+            <button
+              className="text-center my-2 inline-block w-40 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-48"
+              onClick={() => (setExperience("2-5"), setStep(3))}
+            >
+              2-5 Years
+            </button>
+            <button
+              className="text-center my-2 inline-block w-40 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-48"
+              onClick={() => (setExperience("5-10"), setStep(3))}
+            >
+              5-10 Years
+            </button>
+          </div>
+        </>
+      )}
+
+      {step == 3 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Scenario Type
+          </h2>
+          <div className="flex gap-3 flex-wrap justify-center text-lg">
+            <button
+              className="text-center my-2 inline-block w-56 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-60"
+              onClick={() => (setScenario("interview"), setStep(4))}
+            >
+              Interview
+            </button>
+            <button
+              className="text-center my-2 inline-block w-56 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-60"
+              onClick={() => (setScenario("Business-meeting"), setStep(4))}
+            >
+              Business Meeting
+            </button>
+            <button
+              className="text-center my-2 inline-block w-56 rounded-full bg-slate-200 bg-opacity-25 px-4 py-2 font-semibold text-white duration-200 hover:bg-opacity-95 hover:text-black hover:no-underline sm:w-60"
+              onClick={() => (
+                setScenario("personal-communication"), setStep(4)
+              )}
+            >
+              Personal Communication
+            </button>
+          </div>
+        </>
+      )}
+      {step == 4 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Purpose of Meeting
+          </h2>
+          <PlaceholdersAndVanishInput
+            placeholders={[
+              "Job Interview",
+              "Promotion Interview",
+              "Negotiation",
+              "Presentation",
+              "Public Speaking",
+              "Team Meeting",
+              "Client Meeting",
+              "Networking Event",
+              "Conference",
+              "Workshop",
+            ]}
+            onChange={(e) => setPuropse(e.target.value)}
+            onSubmit={() => setStep(5)}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </>
+      )}
+      {step == 5 && (
+        <>
+          <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl  text-white">
+            Key Skills to Focus On
+          </h2>
+          <div className="w-1/2">
+            <ul className="text-sm font-medium text-gray-900 bg-white border border-black bg-opacity-95 rounded-lg dark:bg-gray-900 dark:border-black dark:text-white">
+              <li className="w-full rounded-t-lg dark:border-gray-600">
+                <div className="flex items-center ps-3">
+                  <input
+                    id="vue-checkbox"
+                    type="checkbox"
+                    value="technical"
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                  />
+                  <label
+                    htmlFor="vue-checkbox"
+                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Technical
+                  </label>
+                </div>
+              </li>
+              <li className="w-full rounded-t-lg dark:border-gray-600">
+                <div className="flex items-center ps-3">
+                  <input
+                    id="react-checkbox"
+                    type="checkbox"
+                    value="behavioral"
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                  />
+                  <label
+                    htmlFor="react-checkbox"
+                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Behavioral
+                  </label>
+                </div>
+              </li>
+              <li className="w-full rounded-t-lg dark:border-gray-600">
+                <div className="flex items-center ps-3">
+                  <input
+                    id="angular-checkbox"
+                    type="checkbox"
+                    value="communication"
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                  />
+                  <label
+                    htmlFor="angular-checkbox"
+                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Communication
+                  </label>
+                </div>
+              </li>
+            </ul>
+            <button
+              type="Button"
+              className="flex m-auto mt-24 justify-center items-center"
+              onClick={() => (setStep(6), submitALL())}
+            >
+              <div className="bg-black ">
+                <div className="relative inline-flex  group">
+                  <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+                  <a
+                    title="Get quote now"
+                    className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                    role="button"
+                  >
+                    Proceed
+                  </a>
+                </div>
+              </div>
+            </button>
+          </div>
+        </>
+      )}
+      {step == 6 && (
+        <>
+          <div className="h-full mt-48 w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center">
+            {/* Radial gradient for the container to give a faded look */}
+            <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+            <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8">
+              Thank You for Your Interest!
+            </p>
+          </div>
+          {/* {setTimeout(() => {
+            router.push("/dashboard"); // Replace '/new-page' with the desired route
+          }, 5000)} */}
+        </>
+      )}
+      {/* {selectedValues} */}
     </div>
   );
 }
