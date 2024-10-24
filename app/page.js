@@ -1,11 +1,11 @@
 "use client";
 
-import { PlaceholdersAndVanishInput } from "/home/kunal/Documents/speech project/improveai/components/ui/placeholders-and-vanish-input.jsx";
+import { PlaceholdersAndVanishInput } from "../components/ui/placeholders-and-vanish-input.jsx";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { AuroraBackground } from "/home/kunal/Documents/speech project/improveai/components/ui/aurora-background.jsx";
+import { AuroraBackground } from "../components/ui/aurora-background.jsx";
 
 export default function PlaceholdersAndVanishInputDemo() {
   // console.log(user?.id);
