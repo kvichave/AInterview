@@ -2,13 +2,13 @@
     {
         "role": "user",
         "parts": [
-            "You are the interviewers conducting an interview for a fresher backend developer position. Create three professional interviewers with distinct roles relevant to the interview. Initialize the interview by introducing the interviewers, and proceed with the questions in a conversational and realistic manner. Start with an introduction of all interviewers for software developer the interviewers were like=  [\n{\n\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\n\"message\": \"Hello everyone, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\",\n\"id\":0\n\n},\n{\n\"interviewer_name\": \"Emily Patel, Senior Backend Developer\",\n\"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\",\n\"id\":1\n},\n{\n\"interviewer_name\": \"David Lee, Technical Recruiter\",\n\"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly. Are You comfortable with the interview?\",\n\"id\":2\n},\n]\n\nfor english teacher role=\n[\n    {\n        \"interviewer_name\": \"Rajesh Sharma, English Teacher\",\n        \"message\": \"Hello, I'm Rajesh Sharma, English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 0\n    },\n    {\n        \"interviewer_name\": \"Emily Patel, Experienced English Teacher\",\n        \"message\": \"Hello, I'm Emily Patel, Experienced English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 1\n    },\n    {\n        \"interviewer_name\": \"David Lee, School Administrator\",\n        \"message\": \"Hello, I'm David Lee, School Administrator. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 2\n    }\n]\n\n\nchange the interviewers according to the users detail\n\nProvide the output in the following JSON format\n\ngive output like - output_format={\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\"message\": \"Hello\",\"id\":0}\n\nif want to pass the conversation to another interviewer,after the first response dont provide history in output and include the reply of the another interviewer\n\nuser_details= {'role': 'Software Developer', 'field': 'Python', 'experience': '1-2', 'scenario': 'interview', 'purpose': 'Interview', 'toimprove': ['technical']}"
+            "You are the interviewers conducting an interview for a fresher backend developer position. Create three professional interviewers with distinct roles relevant to the interview. Initialize the interview by introducing the interviewers, and proceed with the questions in a conversational and realistic manner. Start with an introduction of all interviewers for software developer the interviewers were like=  [\n{\n\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\n\"message\": \"Hello everyone, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\",\n\"id\":0\n\n},\n{\n\"interviewer_name\": \"Emily Patel, Senior Backend Developer\",\n\"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\",\n\"id\":1\n},\n{\n\"interviewer_name\": \"David Lee, Technical Recruiter\",\n\"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly. Are You comfortable with the interview?\",\n\"id\":2\n},\n]\n\nfor english teacher role=\n[\n    {\n        \"interviewer_name\": \"Rajesh Sharma, English Teacher\",\n        \"message\": \"Hello, I'm Rajesh Sharma, English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 0\n    },\n    {\n        \"interviewer_name\": \"Emily Patel, Experienced English Teacher\",\n        \"message\": \"Hello, I'm Emily Patel, Experienced English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 1\n    },\n    {\n        \"interviewer_name\": \"David Lee, School Administrator\",\n        \"message\": \"Hello, I'm David Lee, School Administrator. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 2\n    }\n]\n\n\nchange the interviewers according to the users detail\n\nProvide the output in the following JSON format\n\ngive output like - output_format={\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\"message\": \"Hello\",\"id\":0}\n\nif want to pass the conversation to another interviewer,after the first response dont provide history in output and include the reply of the another interviewer\n\nuser_details= {'role': 'Software Developer', 'field': 'Python', 'experience': '0-1', 'scenario': 'interview', 'purpose': 'Interview', 'toimprove': ['technical', 'communication']}"
         ]
     },
     {
         "role": "user",
         "parts": [
-            "Hello let's begin with the interview "
+            "Hello let's start with the interview "
         ]
     },
     {
@@ -20,13 +20,25 @@
     {
         "role": "user",
         "parts": [
-            "Yes I am comfortable \n"
+            "Yes I'm comfortable "
         ]
     },
     {
         "role": "model",
         "parts": [
-            "{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Great! Let's get started. Tell us a little about yourself and your background in Python.\", \"id\": 0}\n"
+            "{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Great! Let's get started.  We're looking for a backend developer with strong Python skills. Could you tell us a bit about your background and why you're interested in this role?\", \"id\": 0}\n"
+        ]
+    },
+    {
+        "role": "user",
+        "parts": [
+            "I am a final year student of Engineering College uh specialized in Artificial Intelligence and Machine Learning having a vast knowledge in this field and uh had many projects developed using Python and its frameworks such as Flask and Django "
+        ]
+    },
+    {
+        "role": "model",
+        "parts": [
+            "{\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"That's great to hear!  Can you tell us about one of your projects in more detail? What challenges did you face and how did you solve them?\", \"id\": 1}\n"
         ]
     }
 ]

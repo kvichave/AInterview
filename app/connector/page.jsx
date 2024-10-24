@@ -70,15 +70,16 @@ export default function MicrophoneComponent() {
         // console.log(reply.message);
         console.log(reply);
         console.log(reply.length);
-        // if (reply.length == 1) {
-        //   console.log("reply:: ", reply[0]["message"]);
-        // } else {
-        //   console.log("reply:: ", reply[0][currentIndex]["message"]);
-        // }
-        console.log("reply:: ", reply[0][currentIndex]["message"]);
 
-        console.log(reply);
-        setMsg(reply[0][currentIndex]["message"]);
+        if (reply[0].length > 1) {
+          setMsg(reply[0][currentIndex]["message"]);
+        } else if (reply.length == 1) {
+          console.log("reply:: ", reply[0]["message"]);
+          setMsg(reply[0]["message"]);
+        }
+        // console.log("reply:: ", reply[0][currentIndex]["message"]);
+        console.log("AudioList::::: ", audiourls);
+        console.log("AudioList index::::: ", audiourls[currentIndex]);
         const audio = new Audio(audiourls[currentIndex]);
         audio.play().catch((error) => {
           console.error("Error playing audio:", error);
@@ -91,6 +92,7 @@ export default function MicrophoneComponent() {
         // Reset playback state when done
         setIsPlaying(false);
         setCurrentIndex(0); // Reset to the first audio
+        setAudiourls([]); // Clear audio URLs
       }
     };
 
