@@ -14,31 +14,7 @@
     {
         "role": "model",
         "parts": [
-            "[{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Hello everyone, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\", \"id\": 0}, {\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\", \"id\": 1}, {\"interviewer_name\": \"David Lee, Technical Recruiter\", \"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly. Are You comfortable with the interview?\", \"id\": 2}]\n"
-        ]
-    },
-    {
-        "role": "user",
-        "parts": [
-            "Yes I'm comfortable "
-        ]
-    },
-    {
-        "role": "model",
-        "parts": [
-            "{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Great! Let's get started.  We're looking for a backend developer with strong Python skills. Could you tell us a bit about your background and why you're interested in this role?\", \"id\": 0}\n"
-        ]
-    },
-    {
-        "role": "user",
-        "parts": [
-            "I am a final year student of Engineering College uh specialized in Artificial Intelligence and Machine Learning having a vast knowledge in this field and uh had many projects developed using Python and its frameworks such as Flask and Django "
-        ]
-    },
-    {
-        "role": "model",
-        "parts": [
-            "{\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"That's great to hear!  Can you tell us about one of your projects in more detail? What challenges did you face and how did you solve them?\", \"id\": 1}\n"
+            "[{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Hello, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\", \"id\": 0}, {\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\", \"id\": 1}, {\"interviewer_name\": \"David Lee, Technical Recruiter\", \"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly.  Are you comfortable with the interview?\", \"id\": 2}]\n"
         ]
     }
 ]
