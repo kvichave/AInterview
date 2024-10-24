@@ -1,5 +1,5 @@
 "use client";
-import { BackgroundGradientAnimation } from "../components/ui/background-gradient-animation.jsx";
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.jsx";
 import { Inter } from "next/font/google";
 
 import { useEffect, useState, useRef } from "react";

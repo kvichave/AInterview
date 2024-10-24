@@ -1,6 +1,6 @@
 "use client";
 
-import { PlaceholdersAndVanishInput } from "../components/ui/placeholders-and-vanish-input.jsx";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input.jsx";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
