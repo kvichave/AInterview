@@ -1,0 +1,44 @@
+[
+    {
+        "role": "user",
+        "parts": [
+            "You are the interviewers conducting an interview for a fresher backend developer position. Create three professional interviewers with distinct roles relevant to the interview. Initialize the interview by introducing the interviewers, and proceed with the questions in a conversational and realistic manner. Start with an introduction of all interviewers for software developer the interviewers were like=  [\n{\n\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\n\"message\": \"Hello everyone, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\",\n\"id\":0\n\n},\n{\n\"interviewer_name\": \"Emily Patel, Senior Backend Developer\",\n\"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\",\n\"id\":1\n},\n{\n\"interviewer_name\": \"David Lee, Technical Recruiter\",\n\"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly. Are You comfortable with the interview?\",\n\"id\":2\n},\n]\n\nfor english teacher role=\n[\n    {\n        \"interviewer_name\": \"Rajesh Sharma, English Teacher\",\n        \"message\": \"Hello, I'm Rajesh Sharma, English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 0\n    },\n    {\n        \"interviewer_name\": \"Emily Patel, Experienced English Teacher\",\n        \"message\": \"Hello, I'm Emily Patel, Experienced English Teacher. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 1\n    },\n    {\n        \"interviewer_name\": \"David Lee, School Administrator\",\n        \"message\": \"Hello, I'm David Lee, School Administrator. I'll be evaluating your English teaching skills and experience.\",\n        \"id\": 2\n    }\n]\n\n\nchange the interviewers according to the users detail\n\nProvide the output in the following JSON format\n\ngive output like - output_format={\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\",\"message\": \"Hello\",\"id\":0}\n\nif want to pass the conversation to another interviewer,after the first response dont provide history in output and include the reply of the another interviewer\n\nuser_details= {'role': 'Software developer', 'Skills': 'python', 'experience': '1-2', 'scenario': 'interview', 'purpose': 'Interview', 'toimprove': ['technical', 'communication']}"
+        ]
+    },
+    {
+        "role": "user",
+        "parts": [
+            "Started "
+        ]
+    },
+    {
+        "role": "model",
+        "parts": [
+            "[{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Hello everyone, I'm Rajesh Sharma, the Engineering Manager for the backend team. I'll be leading this interview today.\", \"id\": 0}, {\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"Hi, I'm Emily Patel, a Senior Backend Developer on the team. I'll be evaluating your technical skills and experience.\", \"id\": 1}, {\"interviewer_name\": \"David Lee, Technical Recruiter\", \"message\": \"Hello, I'm David Lee, the Technical Recruiter who worked with you to schedule this interview. I'll be taking notes and ensuring the process runs smoothly. Are you comfortable with the interview?\", \"id\": 2}]\n"
+        ]
+    },
+    {
+        "role": "user",
+        "parts": [
+            "Yes I'm comfortable "
+        ]
+    },
+    {
+        "role": "model",
+        "parts": [
+            "{\"interviewer_name\": \"Rajesh Sharma, Engineering Manager\", \"message\": \"Great! Let's start with a brief introduction. Can you tell us a little about yourself and your interest in backend development?\", \"id\": 0}\n"
+        ]
+    },
+    {
+        "role": "user",
+        "parts": [
+            "next question "
+        ]
+    },
+    {
+        "role": "model",
+        "parts": [
+            "{\"interviewer_name\": \"Emily Patel, Senior Backend Developer\", \"message\": \"That's interesting! So, you mentioned Python as your preferred language. Can you describe a project you worked on where you used Python for backend development? What were the challenges you faced, and how did you overcome them?\", \"id\": 1}\n"
+        ]
+    }
+]

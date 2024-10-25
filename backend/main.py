@@ -16,6 +16,7 @@ app.register_blueprint(call)
 def profile():
     data = request.get_json()
     json_file_path = 'session_data.json'
+    duplicate_json_file_path = 'duplicate_session_data.json'
     history=[
         {
         "role": "user",
@@ -27,6 +28,8 @@ def profile():
     
     # Write the new data directly to the JSON file, overwriting any existing content
     with open(json_file_path, 'w') as f:
+        json.dump(history, f, indent=4)   
+    with open(duplicate_json_file_path, 'w') as f:
         json.dump(history, f, indent=4)      
     
     return {"message": "success"}

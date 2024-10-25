@@ -3,8 +3,10 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { Inter } from "next/font/google";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export default function MicrophoneComponent() {
+  const router = useRouter();
   const [isRecording, setIsRecording] = useState(false);
   const [recordingComplete, setRecordingComplete] = useState(false);
   const [reply, setTranscript] = useState("");
@@ -15,10 +17,26 @@ export default function MicrophoneComponent() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [msg, setMsg] = useState("");
   const [firstLoad, setFirstLoad] = useState(true);
+  const [initialData, setInitialData] = useState(null);
 
+  // Fetch initial data on load
+  useEffect(() => {
+    const fetchDataOnLoad = async () => {
+      try {
+        const response = await fetch("http://192.168.31.184:5000/clearData");
+        const data = await response.json();
+        setInitialData(data);
+        console.log("Initial data loaded:", data);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    };
+
+    fetchDataOnLoad();
+  }, []);
   const startRecording = async () => {
     setIsRecording(true);
-    audioChunksRef.current = []; // Reset audio chunks
+    audioChunksRef.current = [];
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -36,9 +54,13 @@ export default function MicrophoneComponent() {
           type: "audio/mp3",
         });
 
-        // Send audio file to Flask server
         const formData = new FormData();
         formData.append("audio", audioFile);
+
+        // Clear old state before new data fetch
+        setAudiourls([]);
+        setCurrentIndex(0);
+        setIsPlaying(false);
 
         try {
           const response = await fetch(
@@ -49,13 +71,15 @@ export default function MicrophoneComponent() {
             }
           );
 
-          const data = await response.json(); // Assuming server responds with JSON
-          console.log("Server response:", data.audio_urls);
+          const data = await response.json();
           setFirstLoad(false);
           setTranscript([JSON.parse(data.bot_reply)]);
-          setAudiourls(data.audio_urls);
-          setCurrentIndex(0); // Reset index to start from the first audio file
-          setIsPlaying(true); // Start playing new audio
+          const uniqueAudioUrls = data.audio_urls.map(
+            (url) => `${url}?timestamp=${new Date().getTime()}`
+          );
+          // Set new audio URLs and start playback
+          setAudiourls(uniqueAudioUrls);
+          setIsPlaying(true); // Starts playback on new URLs
         } catch (error) {
           console.error("Error sending audio to server:", error);
         }
@@ -70,40 +94,33 @@ export default function MicrophoneComponent() {
   useEffect(() => {
     const playAudio = () => {
       if (currentIndex < audiourls.length) {
-        // console.log(reply.message);
-        console.log(reply);
-        console.log(reply.length);
-
-        if (reply[0].length > 1) {
+        if (reply[0]?.length > 1) {
           setMsg(reply[0][currentIndex]["message"]);
-        } else if (reply.length == 1) {
-          console.log("reply:: ", reply[0]["message"]);
-          setMsg(reply[0]["message"]);
+        } else if (reply.length === 1) {
+          setMsg(reply[0].message || reply[0][0]?.message);
+        } else if (reply[0]?.length === 1) {
+          setMsg(reply[0][0]["message"]);
         }
-        // console.log("reply:: ", reply[0][currentIndex]["message"]);
-        console.log("AudioList::::: ", audiourls);
-        console.log("AudioList index::::: ", audiourls[currentIndex]);
+
         const audio = new Audio(audiourls[currentIndex]);
         audio.play().catch((error) => {
           console.error("Error playing audio:", error);
         });
 
         audio.addEventListener("ended", () => {
-          setCurrentIndex((prevIndex) => prevIndex + 1); // Move to the next audio
+          setCurrentIndex((prevIndex) => prevIndex + 1);
         });
       } else {
-        // Reset playback state when done
         setIsPlaying(false);
-        setCurrentIndex(0); // Reset to the first audio
-        setAudiourls([]); // Clear audio URLs
+        setCurrentIndex(0);
+        setAudiourls([]);
       }
     };
 
-    if (isPlaying) {
+    if (isPlaying && audiourls.length > 0) {
       playAudio();
     }
-  }, [currentIndex, isPlaying]);
-
+  }, [currentIndex, isPlaying, audiourls]);
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
@@ -123,9 +140,11 @@ export default function MicrophoneComponent() {
   return (
     <BackgroundGradientAnimation>
       <div className="relative z-50">
-        <h1 className="flex items-center justify-center text-3xl pt-24 font-bold">
-          You can say <h1 className="italic">"Lets get started"</h1>
-        </h1>
+        {firstLoad && (
+          <div className="flex items-center justify-center text-3xl pt-24 font-bold">
+            You can say <h1 className="italic">"Lets get started"</h1>
+          </div>
+        )}
 
         <div className="flex items-center justify-center h-screen w-full">
           <div className="w-full relative">
@@ -190,6 +209,26 @@ export default function MicrophoneComponent() {
                   </svg>
                 </button>
               )}
+            </div>
+            <div
+              onClick={() => router.push("/report")}
+              className="m-auto border bg-black border-black rounded w-fit h-fit p-4 flex items-center justify-center -mb-24 mt-24"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                />
+              </svg>
+              Generate Report
             </div>
           </div>
         </div>

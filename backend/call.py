@@ -19,7 +19,8 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Define the path for the JSON file to store conversation history
-HISTORY_FILE_PATH = 'session_data.json'
+HISTORY_FILE_PATH = 'duplicate_session_data.json'
+
 
 def load_history():
     """Load conversation history from a JSON file."""
@@ -135,3 +136,59 @@ def serve_audio(filename):
     # Serve audio files from the AUDIOS directory
     return send_from_directory(AUDIO_FOLDER, filename)
 
+
+@call.route('/clearData', methods=['POST','GET'])
+def create_json():
+    
+    with open("session_data.json", 'r') as f:
+            data= json.load(f)
+    with open(HISTORY_FILE_PATH, 'w') as f:
+        json.dump(data, f, indent=4)
+    return {"message": "Data cleared successfully"}
+
+
+@call.route('/report', methods=['POST','GET'])
+def generateRoport():
+    with open(HISTORY_FILE_PATH, 'r') as f:
+            data= json.load(f)
+    generation_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+    "response_mime_type": "application/json",
+    }
+
+    model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    )
+
+    chat_session = model.start_chat(
+    history=[
+        {
+        "role": "user",
+        "parts": [
+            "I will provide a Json to you, It contains the conversation between Model and user, You have to generate a extreamly detailed report of their mistakes and also score them widely , point there mistakes from the conversation to give examples\nformat \n{ \"Interview Report\": {role,Scenario}\n  \"fluency\": \"7.5\",\n  \"mistakes\": [ explain in detail],\n  \"scores\": { explain in detail\n    \"clarity\": 8,\n    \"confidence\": 7,\n    \"accuracy\": 6\n  },\n  \"visualization_data\": {\n    \"line_chart_fluency\": [\n      { \"response\": 1, \"fluency_score\": 6 },\n      { \"response\": 2, \"fluency_score\": 7 },\n      ...\n    ],\n    \"bar_chart_mistakes\": {\n      \"tenses\": 5,\n      \"word_usage\": 3,\n      \"sentence_structure\": 4\n    },\n    \"pie_chart_communication_clarity\": {\n      \"clarity_score\": 8,\n      \"communication_score\": 7\n    }\n  },\n  \"suggested_improvements\": [\"mprove sentence structure and choice of words.\"],\n  \"benchmark_comparison\": {\n    \"average_fluency\",\n    \"average_clarity\",\n    \"average_accuracy\"\n  },\n  \"summary\": \"The candidate shows strong clarity and communication skills but could improve in sentence structure and word choice to achieve greater accuracy.\"\n}",
+        ],
+        },
+        {
+        "role": "model",
+        "parts": [
+            "```json\n{\"Interview Report\": {\"role\": \"Model\", \"Scenario\": \"Conversation between Model and user\"}, \"fluency\": \"7.5\", \"mistakes\": [\"The candidate displayed minor grammatical errors in some responses, particularly in tense usage. For example, in response 3, the candidate used the past tense instead of the present tense, leading to a slightly confusing sentence structure.  \", \"There were a few instances where the candidate could have used more precise vocabulary to express their thoughts more effectively. In response 5, for instance, the word 'stuff' could have been replaced with a more specific and descriptive term, improving the overall clarity of the message.\", \"While the candidate generally provided relevant information, some responses lacked sufficient detail and could have been expanded upon to provide a more comprehensive answer. For example, in response 7, the candidate could have offered more specific examples to illustrate their point.\"], \"scores\": {\"clarity\": 8, \"confidence\": 7, \"accuracy\": 6}, \"visualization_data\": {\"line_chart_fluency\": [{\"response\": 1, \"fluency_score\": 6}, {\"response\": 2, \"fluency_score\": 7}, {\"response\": 3, \"fluency_score\": 8}, {\"response\": 4, \"fluency_score\": 7}, {\"response\": 5, \"fluency_score\": 6}, {\"response\": 6, \"fluency_score\": 8}, {\"response\": 7, \"fluency_score\": 7}], \"bar_chart_mistakes\": {\"tenses\": 5, \"word_usage\": 3, \"sentence_structure\": 4}, \"pie_chart_communication_clarity\": {\"clarity_score\": 8, \"communication_score\": 7}}, \"suggested_improvements\": [\"Improve sentence structure and choice of words.\", \"Pay attention to verb tense consistency.\", \"Provide more detailed and specific explanations.\"], \"benchmark_comparison\": {\"average_fluency\": \"7.2\", \"average_clarity\": \"7.8\", \"average_accuracy\": \"6.5\"}, \"summary\": \"The candidate demonstrates strong clarity and communication skills, but could benefit from improving sentence structure, word choice, and providing more detailed responses for increased accuracy.  Overall, they performed well in this conversation, showcasing good understanding and fluency.\"}\n\n```",
+        ],
+        },
+    ]
+    )
+
+    response = chat_session.send_message(str(data))
+
+    # print(response.text)
+    # json_data = json.loads(response.text)
+    
+    # # Print formatted JSON
+    # formatted_json = json.dumps(json_data, indent=4)
+    # print(formatted_json)
+# Print the formatted JSON
+    print(response.text)
+    return{"message": response.text}
