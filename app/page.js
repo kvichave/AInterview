@@ -36,7 +36,7 @@ export default function PlaceholdersAndVanishInputDemo() {
 
   const submitALL = async () => {
     const response = await fetch(
-      "https://ainterview-s8tz.onrender.com/user_profile",
+      "https://ainterview-backend.vercel.app/user_profile",
       {
         method: "POST",
         headers: {

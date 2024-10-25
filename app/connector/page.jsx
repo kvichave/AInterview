@@ -24,7 +24,7 @@ export default function MicrophoneComponent() {
     const fetchDataOnLoad = async () => {
       try {
         const response = await fetch(
-          "https://ainterview-s8tz.onrender.com/clearData"
+          "https://ainterview-backend.vercel.app/clearData"
         );
         const data = await response.json();
         setInitialData(data);
@@ -66,7 +66,7 @@ export default function MicrophoneComponent() {
 
         try {
           const response = await fetch(
-            "https://ainterview-s8tz.onrender.com/send_audio",
+            "https://ainterview-backend.vercel.app/send_audio",
             {
               method: "POST",
               body: formData,
