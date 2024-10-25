@@ -35,20 +35,23 @@ export default function PlaceholdersAndVanishInputDemo() {
   };
 
   const submitALL = async () => {
-    const response = await fetch("http://192.168.31.184:5000/user_profile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        role,
-        Skills,
-        experience,
-        scenario,
-        purpose,
-        toimprove,
-      }),
-    });
+    const response = await fetch(
+      "https://ainterview-s8tz.onrender.com/user_profile",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          role,
+          Skills,
+          experience,
+          scenario,
+          purpose,
+          toimprove,
+        }),
+      }
+    );
 
     const result = await response.json();
     // alert(`Response from Flask: ${result.message}`);

@@ -23,7 +23,9 @@ export default function MicrophoneComponent() {
   useEffect(() => {
     const fetchDataOnLoad = async () => {
       try {
-        const response = await fetch("http://192.168.31.184:5000/clearData");
+        const response = await fetch(
+          "https://ainterview-s8tz.onrender.com/clearData"
+        );
         const data = await response.json();
         setInitialData(data);
         console.log("Initial data loaded:", data);
@@ -64,7 +66,7 @@ export default function MicrophoneComponent() {
 
         try {
           const response = await fetch(
-            "http://192.168.31.184:5000/send_audio",
+            "https://ainterview-s8tz.onrender.com/send_audio",
             {
               method: "POST",
               body: formData,

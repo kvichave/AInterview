@@ -35,7 +35,9 @@ function AnalyticsPage() {
   useEffect(() => {
     const fetchDataOnLoad = async () => {
       try {
-        const response = await fetch("http://192.168.31.184:5000/report");
+        const response = await fetch(
+          "https://ainterview-s8tz.onrender.com/report"
+        );
         const result = await response.json();
         setData(JSON.parse(result["message"]));
       } catch (error) {
