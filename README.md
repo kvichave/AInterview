@@ -111,4 +111,6 @@ The Next.js frontend typically starts on http://localhost:3000 (modify the port 
 
 ## Screenshots
 
-![user profile](/images/0.png)
+![user profile](/images/1.png)
+![interview](/images/2.png)
+
