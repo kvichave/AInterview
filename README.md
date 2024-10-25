@@ -89,7 +89,7 @@ pip install -r requirements.txt
 ### 1. Starting the Backend
 With the virtual environment activated in the backend folder, launch the Flask server:
 
-You need to create a .env containing Gemini api
+You need to create a .env containing [Gemini API](https://aistudio.google.com/app/apikey) 
 ```
 .env
 GEMINI_API_KEY=<KEY>
