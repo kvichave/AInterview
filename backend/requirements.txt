@@ -30,6 +30,7 @@ google-generativeai==0.8.3
 googleapis-common-protos==1.65.0
 grpcio==1.67.0
 grpcio-status==1.67.0
+gunicorn==23.0.0
 h11==0.14.0
 h2==4.1.0
 hpack==4.0.0
@@ -69,6 +70,7 @@ Pygments==2.18.0
 pyparsing==3.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
+python-environ==0.4.54
 pyzmq==26.2.0
 Quart==0.19.6
 requests==2.32.3

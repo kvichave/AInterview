@@ -45,6 +45,7 @@ function AnalyticsPage() {
 
     fetchDataOnLoad();
   }, []);
+
   const handlePrint = () => {
     window.print(); // Trigger the print dialog
   };
@@ -128,6 +129,7 @@ function AnalyticsPage() {
         <h2 className="text-4xl font-semibold">Mistakes Count</h2>
         <Bar data={barChartData} options={{ responsive: true }} />
       </div>
+
       {/* Display Mistakes */}
       <div className="mb-8">
         <h2 className="text-4xl  font-semibold">Suggested Improvements</h2>
@@ -139,6 +141,7 @@ function AnalyticsPage() {
           ))}
         </ul>
       </div>
+
       {/* Communication and Clarity Scores Chart */}
       <div className="mb-8">
         <h2 className="text-4xl font-semibold">
@@ -195,6 +198,7 @@ function AnalyticsPage() {
         <h2 className="text-4xl font-semibold">Summary</h2>
         <p className="text-2xl mt-2">{data.summary}</p>
       </div>
+
       {/* Print Button */}
       <button
         onClick={handlePrint}
