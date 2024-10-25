@@ -107,3 +107,8 @@ In the project root directory, run the Next.js development server:
 npm run dev
 ```
 The Next.js frontend typically starts on http://localhost:3000 (modify the port if needed).
+
+
+## Screenshots
+
+![user profile](/images/0.png)
