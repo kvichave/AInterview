@@ -21,18 +21,18 @@ async def speakers(json_data):
         text=interviewer['message']
         id=interviewer['id']
         if id==0:
-            output_file="tmp/0.mp3"
+            output_file="AUDIOS/0.mp3"
             await text_to_speech(text, output_file,voice="en-US-BrianNeural")
             reply_list.append(output_file)
             
 
         if id==1:
-            output_file="tmp/1.mp3"
+            output_file="AUDIOS/1.mp3"
             await text_to_speech(text, output_file,voice="en-IN-NeerjaExpressiveNeural")
             reply_list.append(output_file)
 
         if id==2:
-            output_file="tmp/2.mp3"
+            output_file="AUDIOS/2.mp3"
             await text_to_speech(text, output_file,voice="en-US-ChristopherNeural")
             reply_list.append(output_file)
     return reply_list

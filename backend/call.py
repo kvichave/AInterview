@@ -9,18 +9,18 @@ load_dotenv()
 
 import audio_controller
 # Configure the Gemini API key
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Create a blueprint for user-related routes
 call = Blueprint('call', __name__)
 AUDIO_FOLDER = 'AUDIOS'
 
 # Set the directory to save audio files
-UPLOAD_FOLDER = 'tmp/'
+UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Define the path for the JSON file to store conversation history
-HISTORY_FILE_PATH = 'tmp/duplicate_session_data.json'
+HISTORY_FILE_PATH = 'duplicate_session_data.json'
 
 
 def load_history():
@@ -66,7 +66,7 @@ async def send_audio():
 
     # Wait for the result (non-blocking)
     print("reply_list:::::::::::: ",reply_list)
-    audio_urls = [f'https://ainterview-backend.vercel.app/audio/{file.split("/")[-1]}' for file in reply_list]
+    audio_urls = [f'http://127.0.0.1:5000/audio/{file.split("/")[-1]}' for file in reply_list]
     # return jsonify(audio_urls)
 
     return jsonify({"message": "Audio received and transcribed successfully!", "user_reply": user_reply, "bot_reply": bot_reply, "audio_urls": audio_urls}), 200
@@ -141,7 +141,7 @@ def serve_audio(filename):
 @call.route('/clearData', methods=['POST','GET'])
 def create_json():
     
-    with open("tmp/session_data.json", 'r') as f:
+    with open("session_data.json", 'r') as f:
             data= json.load(f)
     with open(HISTORY_FILE_PATH, 'w') as f:
         json.dump(data, f, indent=4)

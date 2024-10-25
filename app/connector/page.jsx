@@ -23,9 +23,7 @@ export default function MicrophoneComponent() {
   useEffect(() => {
     const fetchDataOnLoad = async () => {
       try {
-        const response = await fetch(
-          "https://ainterview-backend.vercel.app/clearData"
-        );
+        const response = await fetch("http://127.0.0.1:5000/clearData");
         const data = await response.json();
         setInitialData(data);
         console.log("Initial data loaded:", data);
@@ -65,13 +63,10 @@ export default function MicrophoneComponent() {
         setIsPlaying(false);
 
         try {
-          const response = await fetch(
-            "https://ainterview-backend.vercel.app/send_audio",
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
+          const response = await fetch("http://127.0.0.1:5000/send_audio", {
+            method: "POST",
+            body: formData,
+          });
 
           const data = await response.json();
           setFirstLoad(false);

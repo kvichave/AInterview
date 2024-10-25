@@ -35,23 +35,20 @@ export default function PlaceholdersAndVanishInputDemo() {
   };
 
   const submitALL = async () => {
-    const response = await fetch(
-      "https://ainterview-backend.vercel.app/user_profile",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          role,
-          Skills,
-          experience,
-          scenario,
-          purpose,
-          toimprove,
-        }),
-      }
-    );
+    const response = await fetch("http://127.0.0.1:5000/user_profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        role,
+        Skills,
+        experience,
+        scenario,
+        purpose,
+        toimprove,
+      }),
+    });
 
     const result = await response.json();
     // alert(`Response from Flask: ${result.message}`);
