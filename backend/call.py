@@ -4,11 +4,12 @@ import google.generativeai as genai
 import json
 import asyncio
 from dotenv import load_dotenv
+import environ
 load_dotenv()
 
 import audio_controller
 # Configure the Gemini API key
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
 # Create a blueprint for user-related routes
 call = Blueprint('call', __name__)
