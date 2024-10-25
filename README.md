@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Interview Application
+
+This project implements an AI-powered interview application built with a modern full-stack architecture. It utilizes Next.js for the interactive frontend and Flask for the robust backend API.
+
+## Key Technologies
+
+- **Frontend**: Next.js
+- **Backend**: Flask
+- **(Optional)** Python virtual environment (for managing dependencies)
+
+---
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+  - [Frontend (Next.js)](#frontend-nextjs)
+  - [Backend (Flask)](#backend-flask)
+- [Running the Application](#running-the-application)
+  - [Starting the Backend](#starting-the-backend)
+  - [Starting the Frontend](#starting-the-frontend)
+- [API Endpoints](#api-endpoints-to-be-added)
+- [Contributing](#contributing-optional)
+
+---
 
 ## Getting Started
 
-First, run the development server:
+To get this AI interview application up and running, follow the steps for setting up both the frontend (Next.js) and backend (Flask) environments.
+
+## Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+project-root/
+├── backend/
+│   ├── main.py      # Main Flask app file
+│   ├── requirements.txt  # Python dependencies
+│   └── ...          # Other backend-related files
+├── app/
+├── components/
+├── lib/
+├── README.md       # Project documentation
+├── package.json     # Next.js dependencies
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prerequisites
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This project requires the following tools installed on your system:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Node.js** (v14 or later)
+- **Python** (v3.7 or later)
+- **virtualenv** (Optional): For managing Python environments and dependencies isolated from the system-wide installation.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Clone the Repository
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Begin by cloning the repository using Git:
 
-## Deploy on Vercel
+```bash
+git clone https://github.com/kvichave/AInterview.git
+cd AInterview
+```
+### 2. Frontend (Next.js) Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Navigate to the project root directory and install the required Next.js dependencies:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+```
+
+### 3. Backend (Flask) Setup
+Move to the backend folder and consider creating a virtual environment using virtualenv for dependency isolation:
+```cd backend
+virtualenv venv
+source venv/bin/activate  # Activate the virtual environment (Windows: venv\Scripts\activate)
+```
+Next, install the Flask dependencies listed in requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+## Running the Application
+### 1. Starting the Backend
+With the virtual environment activated in the backend folder, launch the Flask server:
+
+You need to create a .env containing Gemini api
+```
+.env
+GEMINI_API_KEY=<KEY>
+```
+
+
+```
+python main.py
+By default, the backend server runs on http://127.0.0.1:5000 (modify the port if needed).
+```
+### 2. Starting the Frontend
+In the project root directory, run the Next.js development server:
+
+```
+npm run dev
+```
+The Next.js frontend typically starts on http://localhost:3000 (modify the port if needed).
