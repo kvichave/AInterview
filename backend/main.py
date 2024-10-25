@@ -15,8 +15,8 @@ app.register_blueprint(call)
 @app.route('/user_profile', methods=['POST', 'GET'])
 def profile():
     data = request.get_json()
-    json_file_path = '/tmp/session_data.json'
-    duplicate_json_file_path = '/tmp/duplicate_session_data.json'
+    json_file_path = 'tmp/session_data.json'
+    duplicate_json_file_path = 'tmp/duplicate_session_data.json'
     history=[
         {
         "role": "user",

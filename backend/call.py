@@ -16,11 +16,11 @@ call = Blueprint('call', __name__)
 AUDIO_FOLDER = 'AUDIOS'
 
 # Set the directory to save audio files
-UPLOAD_FOLDER = '/tmp/uploads'
+UPLOAD_FOLDER = 'tmp/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Define the path for the JSON file to store conversation history
-HISTORY_FILE_PATH = '/tmp/duplicate_session_data.json'
+HISTORY_FILE_PATH = 'tmp/duplicate_session_data.json'
 
 
 def load_history():
@@ -141,7 +141,7 @@ def serve_audio(filename):
 @call.route('/clearData', methods=['POST','GET'])
 def create_json():
     
-    with open("/tmp/session_data.json", 'r') as f:
+    with open("tmp/session_data.json", 'r') as f:
             data= json.load(f)
     with open(HISTORY_FILE_PATH, 'w') as f:
         json.dump(data, f, indent=4)
