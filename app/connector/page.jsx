@@ -144,7 +144,7 @@ export default function MicrophoneComponent() {
       <div className="relative z-50">
         {firstLoad && (
           <div className="flex items-center justify-center text-3xl pt-24 font-bold">
-            You can say <h1 className="italic">"Lets get started"</h1>
+            You can say <h1 className="italic">&quot;Lets get started&quot;</h1>
           </div>
         )}
 
