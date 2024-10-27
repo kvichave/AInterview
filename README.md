@@ -76,7 +76,8 @@ npm install
 
 ### 3. Backend (Flask) Setup
 Move to the backend folder and consider creating a virtual environment using virtualenv for dependency isolation:
-```cd backend
+```
+cd backend
 virtualenv venv
 source venv/bin/activate  # Activate the virtual environment (Windows: venv\Scripts\activate)
 ```
@@ -107,3 +108,10 @@ In the project root directory, run the Next.js development server:
 npm run dev
 ```
 The Next.js frontend typically starts on http://localhost:3000 (modify the port if needed).
+
+
+## Screenshots
+
+![user profile](/images/1.png)
+![interview](/images/2.png)
+
