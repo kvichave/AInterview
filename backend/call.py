@@ -77,7 +77,7 @@ def transcribe(file_path):
     myfile = genai.upload_file(file_path)
     
     # Generate the transcription
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-1.5-flash-8b")
     result = model.generate_content([myfile, "Transcribe this audio clip, provide only plain text response"])
     
     # Return the transcription
@@ -105,7 +105,7 @@ def generate(user_reply):
     }
 
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="gemini-1.5-flash-8b",
         generation_config=generation_config,
     )
     print("11111111111111111111")
