@@ -32,6 +32,7 @@ def handle_audio_chunk(audio_data):
         audio_file.write(audio_data)
 
 
+
 @socketio.on("stop")
 def on_stop():
     print("flask Stopping recording...")
