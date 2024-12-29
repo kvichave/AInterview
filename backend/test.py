@@ -31,6 +31,7 @@ def handle_audio_chunk(audio_data):
         print(f"Received chunk of size: {len(audio_data)} bytes")
         audio_file.write(audio_data)
 
+
 @socketio.on("stop")
 def on_stop():
     print("flask Stopping recording...")
