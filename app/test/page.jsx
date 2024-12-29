@@ -1,74 +1,13 @@
-// "use client";
-// import { useEffect, useRef, useState } from "react";
-// import io from "socket.io-client";
-
-// export default function RealtimeAudioStreamer() {
-//   const [isRecording, setIsRecording] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState("");
-//   const mediaRecorderRef = useRef(null);
-//   const audioChunksRef = useRef([]);
-//   const websocketRef = useRef(null);
-
-//   useEffect(() => {
-//     websocketRef.current = io("http://localhost:5000", {
-//       transports: ["websocket"],
-//     });
-
-//     websocketRef.current.on("connect", () => {
-//       console.log("WebSocket connection established");
-//     });
-//   });
-//   const send = () => {
-//     // Initialize MediaRecorder
-
-//     // Open WebSocket connection
-//     console.log("first");
-//     websocketRef.current.on("disconnect", () => {
-//       console.log("WebSocket connection closed");
-//     });
-
-//     websocketRef.current.on("send", (message) => {
-//       console.log("WebSocket data", message.data);
-//     });
-
-//     websocketRef.current.emit("send");
-//     // Send audio data to backend
-//     // mediaRecorderRef.current.ondataavailable = (event) => {
-//     //   if (
-//     //     event.data.size > 0 &&
-//     //     websocketRef.current.readyState === WebSocket.OPEN
-//     //   ) {
-//     //     websocketRef.current.send(event.data);
-//     //   }
-//     // };
-
-//     // // Start recording
-//     // mediaRecorderRef.current.start(250); // Send audio data every 250ms
-
-//     // websocketRef.current.send("start");
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen">
-//       <button
-//         onClick={send}
-//         className="px-4 py-2 rounded bg-green-500 text-white"
-//       >
-//         Send
-//       </button>
-//       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-//     </div>
-//   );
-// }
-
 "use client";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.jsx";
 import { Inter } from "next/font/google";
 import io from "socket.io-client";
-
+import UserCard from "./userCard";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { Interviewercard } from "./newCard";
 
+import { PinContainer } from "@/components/ui/3d-pin.jsx";
 export default function MicrophoneComponent() {
   const websocketRef = useRef(null);
 
@@ -84,6 +23,7 @@ export default function MicrophoneComponent() {
   const [msg, setMsg] = useState("");
   const [firstLoad, setFirstLoad] = useState(true);
   const [initialData, setInitialData] = useState(null);
+  const [speakers, setSpeakers] = useState([]);
   useEffect(() => {
     websocketRef.current = io("http://localhost:5000", {
       transports: ["websocket"],
@@ -92,8 +32,44 @@ export default function MicrophoneComponent() {
     websocketRef.current.on("connect", () => {
       console.log("WebSocket connection established");
     });
-  });
+    websocketRef.current.on("audio_urls", (files) => {
+      console.log("WebSocket audio_urls event received", files.files);
+      // console.log(
+      //   "WebSocket audio_urls event received",
+      //   files.interviewers[0]
+      // );
+      const inter = files.interviewers;
+      const inte = inter.map((interviewer) => ({
+        ...interviewer,
+        isSpeaking: false,
+      })); // Received data (assume it's an array)
 
+      setSpeakers((prevSpeakers) => {
+        if (prevSpeakers.length === 0) {
+          // Initialize only if speakers are not set
+          return inte;
+        }
+        // Keep the previous data if already set
+        return prevSpeakers;
+      });
+
+      const uniqueAudioUrls = files.files.map(
+        (url) => `${url}?timestamp=${new Date().getTime()}`
+      );
+      // Set new audio URLs and start playback
+      setAudiourls(uniqueAudioUrls);
+      setIsPlaying(true);
+    });
+    return () => {
+      if (websocketRef.current) {
+        websocketRef.current.disconnect();
+      }
+
+      if (mediaRecorderRef.current) {
+        stopRecording();
+      }
+    };
+  }, []);
   // Fetch initial data on load
   // useEffect(() => {
   //   const fetchDataOnLoad = async () => {
@@ -111,90 +87,107 @@ export default function MicrophoneComponent() {
   // }, []);
   const startRecording = async () => {
     setIsRecording(true);
-    audioChunksRef.current = []; // Optional: Store chunks for further processing
+    audioChunksRef.current = [];
 
     try {
-      // Access the user's microphone
+      // Access user's microphone
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
 
-      // WebSocket setup
-      if (!websocketRef.current) {
-        websocketRef.current = io("http://localhost:5000");
-        websocketRef.current.on("connect", () => {
-          console.log("WebSocket connected");
-        });
-        websocketRef.current.on("disconnect", () => {
-          console.log("WebSocket disconnected");
-        });
-      }
-
-      // Event to handle audio chunks
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (websocketRef.current && event.data.size > 0) {
           const reader = new FileReader();
           reader.onload = () => {
-            const audioBuffer = reader.result; // Convert Blob to ArrayBuffer
-            console.log("Sending audio chunk of size:", audioBuffer.byteLength);
+            const audioBuffer = reader.result;
             websocketRef.current.emit("audio_chunk", audioBuffer);
           };
-          reader.readAsArrayBuffer(event.data); // Read the Blob as ArrayBuffer
+          reader.readAsArrayBuffer(event.data);
         }
       };
 
-      // Start recording and emit chunks every 200ms
-      mediaRecorderRef.current.start(200); // Emit data every 200 milliseconds
+      mediaRecorderRef.current.start(200);
+      websocketRef.current.emit("start");
       console.log("Recording started");
 
-      // Handle recording stop
       mediaRecorderRef.current.onstop = () => {
-        console.log("Recording stopped");
-        websocketRef.current.emit("stop"); // Signal to process transcription
-
         setIsRecording(false);
-        setIsPlaying(false);
+        websocketRef.current.emit("stop");
+        console.log("Recording stopped");
       };
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
   };
 
-  // useEffect(() => {
-  //   const playAudio = () => {
-  //     if (currentIndex < audiourls.length) {
-  //       if (reply[0]?.length > 1) {
-  //         setMsg(reply[0][currentIndex]["message"]);
-  //       } else if (reply.length === 1) {
-  //         setMsg(reply[0].message || reply[0][0]?.message);
-  //       } else if (reply[0]?.length === 1) {
-  //         setMsg(reply[0][0]["message"]);
-  //       }
+  useEffect(() => {
+    console.log("Speakers updated:", speakers);
+  }, [speakers]);
+  useEffect(() => {
+    const playAudio = () => {
+      if (currentIndex < audiourls.length) {
+        // if (reply[0]?.length > 1) {
+        //   setMsg(reply[0][currentIndex]["message"]);
+        // } else if (reply.length === 1) {
+        //   setMsg(reply[0].message || reply[0][0]?.message);
+        // } else if (reply[0]?.length === 1) {
+        //   setMsg(reply[0][0]["message"]);
+        // }
 
-  //       const audio = new Audio(audiourls[currentIndex]);
-  //       audio.play().catch((error) => {
-  //         console.error("Error playing audio:", error);
-  //       });
+        const audio = new Audio(audiourls[currentIndex]);
+        const urlstring = audiourls[currentIndex];
+        const match = urlstring.match(/audios\/(\d+)\.mp3/);
+        const result = parseInt(match[1]);
+        console.log("assuming its a index", result, typeof result); // Output: 0
 
-  //       audio.addEventListener("ended", () => {
-  //         setCurrentIndex((prevIndex) => prevIndex + 1);
-  //       });
-  //     } else {
-  //       setIsPlaying(false);
-  //       setCurrentIndex(0);
-  //       setAudiourls([]);
-  //     }
-  //   };
+        // toggleSpeaking(user.id)
+        audio.play(toggleSpeaking(result)).catch((error) => {
+          console.error("Error playing audio:", error);
+        });
 
-  //   if (isPlaying && audiourls.length > 0) {
-  //     playAudio();
-  //   }
-  // }, [currentIndex, isPlaying, audiourls]);
+        audio.addEventListener("ended", () => {
+          setCurrentIndex((prevIndex) => prevIndex + 1);
+        });
+      } else {
+        setIsPlaying(false);
+        setCurrentIndex(0);
+        setAudiourls([]);
+        updateSpeakers();
+      }
+    };
+
+    if (isPlaying && audiourls.length > 0) {
+      playAudio();
+    }
+  }, [currentIndex, isPlaying, audiourls]);
+
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
       setRecordingComplete(true);
       setIsRecording(false);
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
+      mediaRecorderRef.current = null;
     }
+  };
+  const updateSpeakers = () => {
+    setSpeakers((prevSpeakers) =>
+      prevSpeakers.map((interviewer) => ({
+        ...interviewer,
+        isSpeaking: false,
+      }))
+    );
+  };
+  const toggleSpeaking = (id) => {
+    setSpeakers((prevUsers) =>
+      prevUsers.map(
+        (user) =>
+          user.id === id
+            ? { ...user, isSpeaking: !user.isSpeaking }
+            : { ...user, isSpeaking: false } // Ensure only one speaks at a time
+      )
+    );
   };
 
   const handleToggleRecording = () => {
@@ -205,6 +198,20 @@ export default function MicrophoneComponent() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      // Cleanup WebSocket
+      if (websocketRef.current) {
+        websocketRef.current.disconnect();
+      }
+
+      // Stop recording if active and release resources
+      if (mediaRecorderRef.current) {
+        stopRecording();
+      }
+    };
+  }, []);
+
   return (
     <BackgroundGradientAnimation>
       <div className="relative z-50">
@@ -214,7 +221,45 @@ export default function MicrophoneComponent() {
           </div>
         )}
 
-        <div className="flex items-center justify-center h-screen w-full">
+        <div className="flex flex-col items-center justify-center h-screen w-full">
+          <div className="flex  flex-row items-center justify-center">
+            {speakers.length > 0 ? (
+              speakers.map((user, index) => (
+                <div
+                  key={user.id}
+                  className={`m-16  animate-slide-in-up opacity-100 delay-${
+                    index * 100
+                  }`}
+                >
+                  {user.isSpeaking ? (
+                    <PinContainer title={user.message}>
+                      <Interviewercard
+                        isSpeaking={user.isSpeaking}
+                        userName={user.interviewer_name}
+                        imageLink={
+                          "https://static.vecteezy.com/system/resources/previews/008/332/204/non_2x/3d-young-smiling-man-with-dark-sin-tone-and-black-hair-people-cartoon-cute-minimal-character-style-illustration-user-avatar-in-round-frame-isolated-on-white-background-vector.jpg"
+                        }
+                      />{" "}
+                    </PinContainer>
+                  ) : (
+                    <Interviewercard
+                      isSpeaking={user.isSpeaking}
+                      userName={user.interviewer_name}
+                      imageLink={
+                        "https://static.vecteezy.com/system/resources/previews/008/332/204/non_2x/3d-young-smiling-man-with-dark-sin-tone-and-black-hair-people-cartoon-cute-minimal-character-style-illustration-user-avatar-in-round-frame-isolated-on-white-background-vector.jpg"
+                      }
+                    />
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="animate-fade-out opacity-100">
+                <Interviewercard />
+              </div>
+            )}
+          </div>
+          {/* <Interviewercard isSpeaking={true}></Interviewercard> */}
+
           <div className="w-full relative">
             {(isRecording || reply) && (
               <div className="w-1/4 m-auto rounded-md border p-4 bg-white">
@@ -298,6 +343,39 @@ export default function MicrophoneComponent() {
               </svg>
               Generate Report
             </div>
+
+            {/* {speakers.length > 0 ? (
+              speakers.map((user) => (
+                <UserCard
+                  key={user.id}
+                  isSpeaking={user.isSpeaking}
+                  userName={user.interviewer_name}
+                ></UserCard>
+              ))
+            ) : (
+              <UserCard></UserCard>
+            )} */}
+            {/* <div className="user-cards-container flex gap-4">
+              {speakers.length > 0 ? (
+                speakers.map((user, index) => (
+                  <div
+                    key={user.id}
+                    className={`animate-slide-in-up opacity-100 delay-${
+                      index * 100
+                    }`}
+                  >
+                    <UserCard
+                      isSpeaking={user.isSpeaking}
+                      userName={user.interviewer_name}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="animate-fade-out opacity-100">
+                  <UserCard />
+                </div>
+              )}
+            </div> */}
           </div>
         </div>
       </div>
