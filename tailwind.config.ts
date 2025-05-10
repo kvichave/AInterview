@@ -15,6 +15,11 @@ module.exports = {
     extend: {
       fontFamily: { quicksand: ["Quicksand", "sans-serif"] },
       animation: {
+        "fade-in": "fadeIn 0.5s ease-in-out forwards",
+        "fade-in-delay-0": "fadeIn 0.5s 0s ease-in-out forwards",
+        "fade-in-delay-1": "fadeIn 0.5s 0.2s ease-in-out forwards",
+        "fade-in-delay-2": "fadeIn 0.5s 0.4s ease-in-out forwards",
+        // Add delays as required
         aurora: "aurora 60s linear infinite",
 
         first: "moveVertical 30s ease infinite",

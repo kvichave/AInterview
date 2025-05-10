@@ -261,7 +261,7 @@ export default function MicrophoneComponent() {
           {/* <Interviewercard isSpeaking={true}></Interviewercard> */}
 
           <div className="w-full relative">
-            {/* {(isRecording || reply) && (
+            {(isRecording || reply) && (
               <div className="w-1/4 m-auto rounded-md border p-4 bg-white">
                 <div className="flex-1 flex w-full justify-between">
                   <div className="space-y-1">
@@ -287,7 +287,7 @@ export default function MicrophoneComponent() {
                   </div>
                 )}
               </div>
-            )} */}
+            )}
 
             <div className="flex z-50 items-center w-full relative">
               {isRecording ? (
